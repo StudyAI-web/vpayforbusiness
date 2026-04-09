@@ -36,8 +36,8 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "payment",
-      success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}&amount=${amount}`,
-      cancel_url: `${req.headers.get("origin")}/`,
+      success_url: `${req.headers.get("origin") || "https://id-preview--ad5d7764-dd20-4ef7-9a98-8ce3afb77e3e.lovable.app"}/payment-success?session_id={CHECKOUT_SESSION_ID}&amount=${amount}`,
+      cancel_url: `${req.headers.get("origin") || "https://id-preview--ad5d7764-dd20-4ef7-9a98-8ce3afb77e3e.lovable.app"}/`,
       metadata: { ecard_amount: String(amount) },
     });
 
