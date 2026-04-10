@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ecards: {
+        Row: {
+          activated_at: string | null
+          amount: number
+          balance: number
+          card_cvv: string
+          card_expiry: string
+          card_number: string
+          created_at: string
+          id: string
+          status: string
+          stripe_session_id: string | null
+          user_email: string
+        }
+        Insert: {
+          activated_at?: string | null
+          amount: number
+          balance: number
+          card_cvv: string
+          card_expiry: string
+          card_number: string
+          created_at?: string
+          id?: string
+          status?: string
+          stripe_session_id?: string | null
+          user_email: string
+        }
+        Update: {
+          activated_at?: string | null
+          amount?: number
+          balance?: number
+          card_cvv?: string
+          card_expiry?: string
+          card_number?: string
+          created_at?: string
+          id?: string
+          status?: string
+          stripe_session_id?: string | null
+          user_email?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
