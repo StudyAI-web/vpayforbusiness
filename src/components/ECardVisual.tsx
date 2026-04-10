@@ -54,7 +54,7 @@ const ECardVisual = ({
           <div className="flex items-center gap-2">
             <CreditCard className={`text-primary ${isLarge ? "w-6 h-6" : "w-4 h-4"}`} />
             <span className={`font-display font-bold tracking-wider text-primary ${isLarge ? "text-lg" : "text-sm"}`}>
-              LOVABLE
+              VPAY
             </span>
           </div>
           {amount && (
