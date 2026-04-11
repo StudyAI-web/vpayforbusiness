@@ -62,7 +62,7 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const amountCents = paymentIntent.amount;
+    
 
     // Find existing merchant card
     const { data: existingCard } = await supabase

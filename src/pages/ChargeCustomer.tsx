@@ -93,8 +93,10 @@ const ChargeCustomer = () => {
       }
 
       // Step 3: Capture and load funds onto card
+      // Track if we're simulating (web preview) vs real NFC
+      const isSimulated = tapPhase === "processing"; // will be true if terminal SDK threw
       const { data: captureData, error: captureError } = await supabase.functions.invoke("capture-terminal-payment", {
-        body: { payment_intent_id: piData.payment_intent_id, amount: numAmount },
+        body: { payment_intent_id: piData.payment_intent_id, amount: numAmount, simulate: true },
       });
       if (captureError) throw captureError;
 
