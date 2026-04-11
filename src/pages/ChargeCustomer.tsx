@@ -44,15 +44,16 @@ const ChargeCustomer = () => {
       // Step 2: Try to use Stripe Terminal NFC tap-to-pay
       try {
         const { StripeTerminal } = await import("@capacitor-community/stripe-terminal");
+        const { TerminalConnectTypes, TerminalEventsEnum } = await import("@capacitor-community/stripe-terminal");
 
-        // Initialize terminal with connection token
+        // Initialize terminal with connection token provider
         await StripeTerminal.initialize({
           tokenProviderEndpoint: "",
           isTest: true,
         });
 
-        // Provide connection token
-        StripeTerminal.addListener("requestConnectionToken", async () => {
+        // Provide connection token when requested
+        StripeTerminal.addListener(TerminalEventsEnum.RequestedConnectionToken, async () => {
           const { data: tokenData } = await supabase.functions.invoke("create-connection-token");
           if (tokenData?.secret) {
             await StripeTerminal.setConnectionToken({ token: tokenData.secret });
@@ -61,7 +62,7 @@ const ChargeCustomer = () => {
 
         // Discover and connect to tap-to-pay reader
         const { readers } = await StripeTerminal.discoverReaders({
-          type: 0, // TapToPay
+          type: TerminalConnectTypes.TapToPay,
           locationId: undefined,
         });
 
@@ -75,7 +76,7 @@ const ChargeCustomer = () => {
 
           // Collect payment
           await StripeTerminal.collectPaymentMethod({
-            paymentIntentClientSecret: piData.client_secret,
+            paymentIntent: piData.client_secret,
           });
 
           // Confirm payment
