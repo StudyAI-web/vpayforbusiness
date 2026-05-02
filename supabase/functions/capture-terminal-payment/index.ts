@@ -26,7 +26,7 @@ serve(async (req) => {
   }
 
   try {
-    const { payment_intent_id, amount, simulate } = await req.json();
+    const { payment_intent_id } = await req.json();
 
     if (!payment_intent_id) {
       return new Response(
@@ -39,23 +39,24 @@ serve(async (req) => {
       apiVersion: "2025-08-27.basil",
     });
 
-    let amountCents: number;
-
-    if (simulate) {
-      // Web preview simulation — skip Stripe verification, use provided amount
-      amountCents = Math.round(Number(amount) * 100);
-    } else {
-      // Verify the payment intent succeeded
-      const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent_id);
-      
-      if (paymentIntent.status !== "succeeded") {
-        return new Response(
-          JSON.stringify({ error: `Payment not completed. Status: ${paymentIntent.status}` }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      amountCents = paymentIntent.amount;
+    // Verify Stripe reports a real card-present payment before loading funds.
+    const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent_id);
+    
+    if (paymentIntent.status !== "succeeded") {
+      return new Response(
+        JSON.stringify({ error: `Payment not completed. Status: ${paymentIntent.status}` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
+
+    if (!paymentIntent.payment_method_types.includes("card_present")) {
+      return new Response(
+        JSON.stringify({ error: "Only card-present Tap to Pay payments can be captured" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const amountCents = paymentIntent.amount;
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
