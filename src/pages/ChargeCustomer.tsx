@@ -26,8 +26,12 @@ const ChargeCustomer = () => {
 
   const handleCharge = async () => {
     const numAmount = parseFloat(amount);
-    if (!numAmount || numAmount <= 0) {
-      toast.error("Enter a valid amount");
+    if (!Number.isFinite(numAmount) || numAmount < 0.5) {
+      toast.error("Enter a valid amount (min $0.50)");
+      return;
+    }
+    if (numAmount > 999999) {
+      toast.error("Amount too large");
       return;
     }
 
@@ -186,14 +190,18 @@ const ChargeCustomer = () => {
                   $
                 </span>
                 <Input
-                  type="number"
+                  type="text"
                   inputMode="decimal"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/[^0-9.]/g, "");
+                    // prevent multiple dots
+                    const parts = v.split(".");
+                    const clean = parts.length > 2 ? parts[0] + "." + parts.slice(1).join("") : v;
+                    setAmount(clean.slice(0, 9));
+                  }}
                   placeholder="0.00"
                   className="h-16 pl-10 text-3xl font-display font-bold text-foreground bg-card border-border text-center"
-                  min="0.50"
-                  step="0.01"
                 />
               </div>
 
