@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import ECardVisual from "@/components/ECardVisual";
 import { Button } from "@/components/ui/button";
-import { CreditCard, DollarSign, ArrowUpRight, Smartphone } from "lucide-react";
+import { CreditCard, DollarSign, ArrowUpRight, Smartphone, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface MerchantCard {
   card_number: string;
@@ -16,6 +17,7 @@ interface MerchantCard {
 const Index = () => {
   const [card, setCard] = useState<MerchantCard | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const fetchCard = async () => {
@@ -53,6 +55,14 @@ const Index = () => {
             <span className="font-display font-bold text-xl text-foreground tracking-wide">
               V<span className="text-primary">Pay</span>
             </span>
+          </div>
+          <div className="flex items-center gap-3">
+            {user?.email && (
+              <span className="text-xs text-muted-foreground hidden sm:inline">{user.email}</span>
+            )}
+            <Button variant="ghost" size="sm" onClick={signOut} aria-label="Sign out">
+              <LogOut className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </header>
