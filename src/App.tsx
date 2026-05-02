@@ -3,7 +3,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
+import Auth from "./pages/Auth.tsx";
 import ChargeCustomer from "./pages/ChargeCustomer.tsx";
 import ChargeSuccess from "./pages/ChargeSuccess.tsx";
 import PaymentSuccess from "./pages/PaymentSuccess.tsx";
@@ -17,14 +20,17 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/charge" element={<ChargeCustomer />} />
-          <Route path="/charge-success" element={<ChargeSuccess />} />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/charge" element={<ProtectedRoute><ChargeCustomer /></ProtectedRoute>} />
+            <Route path="/charge-success" element={<ProtectedRoute><ChargeSuccess /></ProtectedRoute>} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
