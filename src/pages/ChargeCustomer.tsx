@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Loader2, CheckCircle2, Smartphone, Nfc } from "lucide-react";
+import { ArrowLeft, Loader2, CheckCircle2, Nfc } from "lucide-react";
 import { toast } from "sonner";
 import ECardVisual from "@/components/ECardVisual";
 
@@ -45,62 +45,47 @@ const ChargeCustomer = () => {
       });
       if (piError) throw piError;
 
-      // Step 2: Try to use Stripe Terminal NFC tap-to-pay
-      try {
-        const { StripeTerminal } = await import("@capacitor-community/stripe-terminal");
-        const { TerminalConnectTypes, TerminalEventsEnum } = await import("@capacitor-community/stripe-terminal");
+      // Step 2: Use Stripe Terminal NFC tap-to-pay. Never simulate or auto-complete payments.
+      const { StripeTerminal } = await import("@capacitor-community/stripe-terminal");
+      const { TerminalConnectTypes, TerminalEventsEnum } = await import("@capacitor-community/stripe-terminal");
 
-        // Initialize terminal with connection token provider
-        await StripeTerminal.initialize({
-          tokenProviderEndpoint: "",
-          isTest: true,
-        });
+      await StripeTerminal.initialize({
+        tokenProviderEndpoint: "",
+        isTest: true,
+      });
 
-        // Provide connection token when requested
-        StripeTerminal.addListener(TerminalEventsEnum.RequestedConnectionToken, async () => {
-          const { data: tokenData } = await supabase.functions.invoke("create-connection-token");
-          if (tokenData?.secret) {
-            await StripeTerminal.setConnectionToken({ token: tokenData.secret });
-          }
-        });
-
-        // Discover and connect to tap-to-pay reader
-        const { readers } = await StripeTerminal.discoverReaders({
-          type: TerminalConnectTypes.TapToPay,
-          locationId: undefined,
-        });
-
-        if (readers && readers.length > 0) {
-          await StripeTerminal.connectReader({
-            reader: readers[0],
-          });
-
-          setTapPhase("processing");
-          toast.info("Tap the customer's card or phone now!");
-
-          // Collect payment
-          await StripeTerminal.collectPaymentMethod({
-            paymentIntent: piData.client_secret,
-          });
-
-          // Confirm payment
-          await StripeTerminal.confirmPaymentIntent();
-        } else {
-          throw new Error("NO_READER");
+      StripeTerminal.addListener(TerminalEventsEnum.RequestedConnectionToken, async () => {
+        const { data: tokenData } = await supabase.functions.invoke("create-connection-token");
+        if (tokenData?.secret) {
+          await StripeTerminal.setConnectionToken({ token: tokenData.secret });
         }
-      } catch (terminalErr: any) {
-        // On web preview, Terminal SDK is unavailable — simulate the tap flow
-        console.log("Terminal SDK error (expected on web):", terminalErr?.message);
-        setTapPhase("processing");
-        toast.info("NFC not available — simulating tap payment for preview...", { duration: 2000 });
-        await new Promise((r) => setTimeout(r, 2000));
+      });
+
+      const { readers } = await StripeTerminal.discoverReaders({
+        type: TerminalConnectTypes.TapToPay,
+        locationId: undefined,
+      });
+
+      if (!readers?.length) {
+        throw new Error("No Tap to Pay reader found. Open this in the native mobile app and use a supported device.");
       }
 
+      await StripeTerminal.connectReader({
+        reader: readers[0],
+      });
+
+      setTapPhase("processing");
+      toast.info("Tap the customer's card or phone now!");
+
+      await StripeTerminal.collectPaymentMethod({
+        paymentIntent: piData.client_secret,
+      });
+
+      await StripeTerminal.confirmPaymentIntent();
+
       // Step 3: Capture and load funds onto card
-      // Track if we're simulating (web preview) vs real NFC
-      const isSimulated = tapPhase === "processing"; // will be true if terminal SDK threw
       const { data: captureData, error: captureError } = await supabase.functions.invoke("capture-terminal-payment", {
-        body: { payment_intent_id: piData.payment_intent_id, amount: numAmount, simulate: true },
+        body: { payment_intent_id: piData.payment_intent_id },
       });
       if (captureError) throw captureError;
 
