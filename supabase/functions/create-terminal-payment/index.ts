@@ -28,9 +28,9 @@ serve(async (req) => {
   try {
     const { amount } = await req.json();
 
-    if (!amount || typeof amount !== "number" || amount < 0.5) {
+    if (!amount || typeof amount !== "number" || !Number.isFinite(amount) || amount < 0.5 || amount > 999999) {
       return new Response(
-        JSON.stringify({ error: "Amount must be at least $0.50" }),
+        JSON.stringify({ error: "Amount must be between $0.50 and $999,999" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
