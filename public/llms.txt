@@ -1,0 +1,10 @@
+# VPay For Business
+
+> Merchant dashboard to accept NFC tap-to-pay card payments and manage a persistent virtual card balance.
+
+VPay For Business is a single-user merchant app. Payments captured via Stripe Terminal tap-to-pay are automatically loaded onto a "forever" virtual card that the merchant can view and spend.
+
+## Pages
+
+- [Home](/): Merchant dashboard showing virtual card balance, total earned, and quick access to charge customers.
+- [Sign In](/auth): Sign in or create a VPay merchant account with email, Google, or Apple.

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import ECardVisual from "@/components/ECardVisual";
 import { Button } from "@/components/ui/button";
@@ -82,7 +83,13 @@ const PaymentSuccess = () => {
   if (!card) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background">
+      <Helmet>
+        <title>Payment Success | VPay For Business</title>
+        <meta name="description" content="Your VPay virtual card has been activated. View your card details and balance." />
+        <meta name="robots" content="noindex" />
+        <link rel="canonical" href="https://vpayforbusiness.lovable.app/payment-success" />
+      </Helmet>
       <div className="container mx-auto px-4 py-16 max-w-lg">
         {/* Success header */}
         <div className="text-center space-y-3 mb-10">
@@ -109,9 +116,9 @@ const PaymentSuccess = () => {
 
         {/* Card details */}
         <div className="space-y-3 bg-card rounded-xl border border-border p-5">
-          <h3 className="font-display font-semibold text-foreground text-sm uppercase tracking-wider mb-4">
+          <h2 className="font-display font-semibold text-foreground text-sm uppercase tracking-wider mb-4">
             Card Details
-          </h3>
+          </h2>
 
           {[
             { label: "Card Number", value: card.card_number.replace(/(.{4})/g, "$1 ").trim() },
@@ -125,6 +132,7 @@ const PaymentSuccess = () => {
                 <span className="font-mono text-sm text-foreground">{value}</span>
                 <button
                   onClick={() => copyToClipboard(value.replace(/\s/g, ""), label)}
+                  aria-label={`Copy ${label}`}
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Copy className="w-3.5 h-3.5" />
@@ -142,7 +150,7 @@ const PaymentSuccess = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

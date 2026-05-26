@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import ECardVisual from "@/components/ECardVisual";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
+      <Helmet>
+        <title>VPay For Business — Merchant Payment Dashboard</title>
+        <meta name="description" content="View your VPay virtual card balance, total earnings, and start a contactless tap-to-pay charge from your merchant dashboard." />
+        <meta property="og:title" content="VPay For Business — Merchant Payment Dashboard" />
+        <meta property="og:description" content="View your VPay virtual card balance and accept NFC tap-to-pay payments." />
+        <meta property="og:url" content="https://vpayforbusiness.lovable.app/" />
+        <link rel="canonical" href="https://vpayforbusiness.lovable.app/" />
+      </Helmet>
       {/* Header */}
       <header className="border-b border-border/50">
         <div className="container mx-auto flex items-center justify-between py-4 px-4">
@@ -67,7 +76,7 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-lg space-y-8">
+      <main className="container mx-auto px-4 py-8 max-w-lg space-y-8">
         {/* Card display */}
         <section className="space-y-4">
           <h1 className="font-display text-2xl font-bold text-foreground text-center">
@@ -153,9 +162,9 @@ const Index = () => {
         {/* Card details */}
         {card && (
           <section className="rounded-xl border border-border bg-card p-5 space-y-3">
-            <h3 className="font-display font-semibold text-foreground text-sm uppercase tracking-wider">
+            <h2 className="font-display font-semibold text-foreground text-sm uppercase tracking-wider">
               Card Details
-            </h3>
+            </h2>
             {[
               { label: "Card Number", value: card.card_number.replace(/(.{4})/g, "$1 ").trim() },
               { label: "Expiry", value: "Forever ∞" },
@@ -179,7 +188,7 @@ const Index = () => {
             Deploy as a native app to accept contactless payments via NFC tap against your device.
           </p>
         </section>
-      </div>
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-6 mt-8">

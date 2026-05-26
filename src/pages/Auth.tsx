@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
@@ -72,7 +73,15 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "var(--gradient-hero)" }}>
+    <main className="min-h-screen flex items-center justify-center px-4" style={{ background: "var(--gradient-hero)" }}>
+      <Helmet>
+        <title>Sign In | VPay For Business</title>
+        <meta name="description" content="Sign in to your VPay For Business merchant account to accept tap-to-pay payments and manage your virtual card balance." />
+        <meta property="og:title" content="Sign In | VPay For Business" />
+        <meta property="og:description" content="Sign in to your VPay For Business merchant account." />
+        <meta property="og:url" content="https://vpayforbusiness.lovable.app/auth" />
+        <link rel="canonical" href="https://vpayforbusiness.lovable.app/auth" />
+      </Helmet>
       <div className="w-full max-w-md space-y-6">
         <Link to="/" className="flex items-center justify-center gap-2">
           <CreditCard className="w-7 h-7 text-primary" />
@@ -80,6 +89,9 @@ const Auth = () => {
             V<span className="text-primary">Pay</span>
           </span>
         </Link>
+        <h1 className="font-display text-2xl font-bold text-foreground text-center">
+          Sign in to VPay
+        </h1>
 
         <div className="rounded-2xl border border-border bg-card p-6 space-y-5 shadow-xl">
           <Tabs defaultValue="signin" className="w-full">
@@ -146,7 +158,7 @@ const Auth = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
