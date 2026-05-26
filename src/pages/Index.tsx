@@ -162,9 +162,9 @@ const Index = () => {
         {/* Card details */}
         {card && (
           <section className="rounded-xl border border-border bg-card p-5 space-y-3">
-            <h3 className="font-display font-semibold text-foreground text-sm uppercase tracking-wider">
+            <h2 className="font-display font-semibold text-foreground text-sm uppercase tracking-wider">
               Card Details
-            </h3>
+            </h2>
             {[
               { label: "Card Number", value: card.card_number.replace(/(.{4})/g, "$1 ").trim() },
               { label: "Expiry", value: "Forever ∞" },
@@ -173,7 +173,7 @@ const Index = () => {
               <div key={label} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
                 <span className="text-sm text-muted-foreground">{label}</span>
                 <span className="font-mono text-sm text-foreground">{value}</span>
-              </div>
+      </main>
             ))}
           </section>
         )}
