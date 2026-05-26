@@ -147,7 +147,7 @@ const ChargeCustomer = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
