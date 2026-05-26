@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import ECardVisual from "@/components/ECardVisual";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
+      <Helmet>
+        <title>VPay For Business — Merchant Payment Dashboard</title>
+        <meta name="description" content="View your VPay virtual card balance, total earnings, and start a contactless tap-to-pay charge from your merchant dashboard." />
+        <meta property="og:title" content="VPay For Business — Merchant Payment Dashboard" />
+        <meta property="og:description" content="View your VPay virtual card balance and accept NFC tap-to-pay payments." />
+        <meta property="og:url" content="https://vpayforbusiness.lovable.app/" />
+        <link rel="canonical" href="https://vpayforbusiness.lovable.app/" />
+      </Helmet>
       {/* Header */}
       <header className="border-b border-border/50">
         <div className="container mx-auto flex items-center justify-between py-4 px-4">
@@ -67,7 +76,7 @@ const Index = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-lg space-y-8">
+      <main className="container mx-auto px-4 py-8 max-w-lg space-y-8">
         {/* Card display */}
         <section className="space-y-4">
           <h1 className="font-display text-2xl font-bold text-foreground text-center">
