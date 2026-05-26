@@ -162,7 +162,7 @@ const ChargeCustomer = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-10 max-w-md space-y-8">
+      <main className="container mx-auto px-4 py-10 max-w-md space-y-8">
         {tapPhase === "idle" && (
           <>
             <div className="text-center space-y-2">
@@ -261,7 +261,7 @@ const ChargeCustomer = () => {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };
