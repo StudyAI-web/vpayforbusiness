@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,7 +104,12 @@ const ChargeCustomer = () => {
   if (tapPhase === "success" && card) {
     const addedAmount = card.added || Math.round(parseFloat(amount || "0") * 100);
     return (
-      <div className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
+      <main className="min-h-screen" style={{ background: "var(--gradient-hero)" }}>
+        <Helmet>
+          <title>Charge Customer | VPay For Business</title>
+          <meta name="description" content="Enter an amount and accept a contactless NFC tap-to-pay charge from a customer's card or phone with VPay." />
+          <link rel="canonical" href="https://vpayforbusiness.lovable.app/charge" />
+        </Helmet>
         <div className="container mx-auto px-4 py-16 max-w-lg">
           <div className="text-center space-y-3 mb-10">
             <CheckCircle2 className="w-14 h-14 text-primary mx-auto" />
@@ -177,6 +183,7 @@ const ChargeCustomer = () => {
                 <Input
                   type="text"
                   inputMode="decimal"
+                  aria-label="Charge amount in dollars"
                   value={amount}
                   onChange={(e) => {
                     const v = e.target.value.replace(/[^0-9.]/g, "");
