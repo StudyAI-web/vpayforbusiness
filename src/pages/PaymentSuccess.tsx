@@ -140,7 +140,7 @@ const PaymentSuccess = () => {
               </div>
             </div>
           ))}
-        </div>
+    </main>
 
         <div className="mt-8 text-center">
           <Button asChild variant="outline" className="border-border text-foreground hover:bg-secondary">
