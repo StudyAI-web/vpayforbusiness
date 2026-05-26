@@ -173,7 +173,7 @@ const Index = () => {
               <div key={label} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
                 <span className="text-sm text-muted-foreground">{label}</span>
                 <span className="font-mono text-sm text-foreground">{value}</span>
-      </main>
+              </div>
             ))}
           </section>
         )}
@@ -188,7 +188,7 @@ const Index = () => {
             Deploy as a native app to accept contactless payments via NFC tap against your device.
           </p>
         </section>
-      </div>
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-border/50 py-6 mt-8">
