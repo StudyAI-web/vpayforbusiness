@@ -48,6 +48,15 @@ const ChargeCustomer = () => {
     setTapPhase("waiting");
 
     try {
+      // Tap to Pay requires a real native iOS/Android build. In the web
+      // preview the Stripe Terminal SDK will fail with errors like
+      // "supports internet connection" because there's no NFC hardware.
+      if (!Capacitor.isNativePlatform()) {
+        throw new Error(
+          "Tap to Pay only works in the native mobile app. Open VPay on your iPhone (built via Capacitor) to accept a real tap."
+        );
+      }
+
       // Step 1: Create a terminal payment intent
       const { data: piData, error: piError } = await supabase.functions.invoke("create-terminal-payment", {
         body: { amount: numAmount },
@@ -58,17 +67,25 @@ const ChargeCustomer = () => {
       const { StripeTerminal } = await import("@capacitor-community/stripe-terminal");
       const { TerminalConnectTypes, TerminalEventsEnum } = await import("@capacitor-community/stripe-terminal");
 
-      await StripeTerminal.initialize({
-        tokenProviderEndpoint: "",
-        isTest: true,
-      });
+      // Register the connection-token listener ONCE — adding it on every tap
+      // leaks listeners and re-init throws "Stripe is already initialized".
+      if (!tokenListenerRegistered) {
+        StripeTerminal.addListener(TerminalEventsEnum.RequestedConnectionToken, async () => {
+          const { data: tokenData } = await supabase.functions.invoke("create-connection-token");
+          if (tokenData?.secret) {
+            await StripeTerminal.setConnectionToken({ token: tokenData.secret });
+          }
+        });
+        tokenListenerRegistered = true;
+      }
 
-      StripeTerminal.addListener(TerminalEventsEnum.RequestedConnectionToken, async () => {
-        const { data: tokenData } = await supabase.functions.invoke("create-connection-token");
-        if (tokenData?.secret) {
-          await StripeTerminal.setConnectionToken({ token: tokenData.secret });
-        }
-      });
+      if (!terminalInitialized) {
+        await StripeTerminal.initialize({
+          tokenProviderEndpoint: "",
+          isTest: true,
+        });
+        terminalInitialized = true;
+      }
 
       const { readers } = await StripeTerminal.discoverReaders({
         type: TerminalConnectTypes.TapToPay,
@@ -91,6 +108,7 @@ const ChargeCustomer = () => {
       });
 
       await StripeTerminal.confirmPaymentIntent();
+
 
       // Step 3: Capture and load funds onto card
       const { data: captureData, error: captureError } = await supabase.functions.invoke("capture-terminal-payment", {
