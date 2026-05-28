@@ -10,6 +10,7 @@ import Auth from "./pages/Auth.tsx";
 import ChargeCustomer from "./pages/ChargeCustomer.tsx";
 import ChargeSuccess from "./pages/ChargeSuccess.tsx";
 import PaymentSuccess from "./pages/PaymentSuccess.tsx";
+import Payouts from "./pages/Payouts.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/charge" element={<ProtectedRoute><ChargeCustomer /></ProtectedRoute>} />
             <Route path="/charge-success" element={<ProtectedRoute><ChargeSuccess /></ProtectedRoute>} />
+            <Route path="/payouts" element={<ProtectedRoute><Payouts /></ProtectedRoute>} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
