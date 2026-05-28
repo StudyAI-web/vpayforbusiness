@@ -26,11 +26,11 @@ const Payouts = () => {
       <main className="container mx-auto px-4 py-8 max-w-lg space-y-6">
         <section className="rounded-xl border border-primary/20 bg-primary/5 p-5 space-y-2">
           <p className="text-sm text-foreground font-display font-semibold">
-            Connect Your Chase Account
+            Connect Your Payout Destination
           </p>
           <p className="text-xs text-muted-foreground">
-            All NFC tap-to-pay earnings land in your Stripe balance. Add your Chase
-            checking account or debit card below to receive automatic payouts.
+            All NFC tap-to-pay earnings land in your Stripe balance. Add a bank
+            account or debit card below to receive automatic payouts.
           </p>
         </section>
 
@@ -40,14 +40,14 @@ const Payouts = () => {
             <Building2 className="w-5 h-5 text-primary mt-1" />
             <div className="flex-1">
               <h2 className="font-display font-semibold text-foreground">
-                Chase Checking Account
+                Bank Account
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
                 Standard payouts arrive in 1–2 business days. No fees.
               </p>
               <p className="text-xs text-muted-foreground mt-2">
-                You'll need your Chase <span className="font-mono">routing number</span> and{" "}
-                <span className="font-mono">account number</span> (find them on a check or in the Chase app).
+                You'll need your <span className="font-mono">routing number</span> and{" "}
+                <span className="font-mono">account number</span> (find them on a check or in your banking app).
               </p>
             </div>
           </div>
@@ -72,14 +72,14 @@ const Payouts = () => {
             <CreditCard className="w-5 h-5 text-primary mt-1" />
             <div className="flex-1">
               <h2 className="font-display font-semibold text-foreground">
-                Chase Debit Card
+                Debit Card
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
                 Instant Payouts arrive in ~30 minutes, 24/7. Stripe charges a 1.5% fee.
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 Only Visa or Mastercard <span className="font-semibold">debit</span> cards
-                are eligible. Credit cards (including Apple Card) are not supported.
+                are eligible. Credit cards are not supported.
               </p>
             </div>
           </div>
