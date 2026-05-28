@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { Capacitor } from "@capacitor/core";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Loader2, CheckCircle2, Nfc } from "lucide-react";
 import { toast } from "sonner";
 import ECardVisual from "@/components/ECardVisual";
+
+// Module-level guards so we only initialize the Stripe Terminal SDK and
+// register its connection-token listener ONCE per page session. Re-calling
+// initialize() throws "Stripe is already initialized".
+let terminalInitialized = false;
+let tokenListenerRegistered = false;
+
 
 const PRESET_AMOUNTS = [5, 10, 25, 50];
 
