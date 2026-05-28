@@ -124,7 +124,7 @@ const Index = () => {
         </section>
 
         {/* Charge button */}
-        <section>
+        <section className="space-y-3">
           <Button
             asChild
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-display font-semibold h-14 text-lg"
@@ -133,6 +133,12 @@ const Index = () => {
             <Link to="/charge">
               <Smartphone className="mr-2 h-5 w-5" />
               Charge Customer
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link to="/payouts">
+              <DollarSign className="mr-2 h-4 w-4" />
+              Payout Setup
             </Link>
           </Button>
         </section>
